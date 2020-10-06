@@ -31,7 +31,7 @@ describe Oystercard do
   end
 
   describe '#in_journey' do
-    it 'checks the status of the journey' do
+    it 'checks the class responds to in_journey?' do
     expect(subject).to respond_to(:in_journey?)
   end
 
@@ -41,5 +41,15 @@ describe Oystercard do
 
   end
 
+  describe '#touch_in' do
+    it 'checks that the touch_in method exists' do
+    expect(subject).to respond_to(:touch_in)
+  end
+
+   it 'checks that touch in changes journey status to true' do
+     subject.touch_in
+     expect(subject.in_journey?).to eq(true)
+   end
+end
 
 end

@@ -50,9 +50,16 @@ describe Oystercard do
     end
 
     it 'checks that touch in changes journey status to true' do
+      subject.top_up(1)
       subject.touch_in
       expect(subject.in_journey?).to eq(true)
     end
+
+    it 'check if the minimum amount is at least £1' do
+      expect { subject.touch_in }.to raise_error "balance is not enough"
+    end
+
+
   end
 
   describe '#touch_out' do
@@ -62,8 +69,10 @@ describe Oystercard do
   end
 
   it 'expects touch_out to change journey_status to false' do
+    subject.top_up(1)
     subject.touch_in
     subject.touch_out
     expect(subject.in_journey?).to eq(false)
   end
+
 end

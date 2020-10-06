@@ -1,19 +1,22 @@
 class Oystercard
-    attr_reader :balance
+  BALANCE_LIMIT = 90
 
-    def initialize
-        @balance = 0
-        @journey_status = false
-    end
+  attr_reader :balance
 
-    def top_up(amount)
-        fail 'You cannot have more than £90 in your balance' if @balance + amount > 90
-        @balance += amount
-    end
+  def initialize
+    @balance = 0
+    @journey_status = false
+  end
 
-    def deduct(deducted_am)
-        @balance -= deducted_am
-    end
+  def top_up(amount)
+    raise 'You cannot have more than £90 in your balance' if @balance + amount > BALANCE_LIMIT
+
+    @balance += amount
+  end
+
+  def deduct(deducted_am)
+    @balance -= deducted_am
+  end
 
   def in_journey?
     @journey_status
@@ -23,5 +26,7 @@ class Oystercard
     @journey_status = true
   end
 
-
+  def touch_out
+    @journey_status = false
+  end
 end

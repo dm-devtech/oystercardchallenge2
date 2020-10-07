@@ -32,6 +32,8 @@ describe Oystercard do
 
   describe '#touch_in' do
 
+    it { is_expected.to respond_to(:touch_in).with(1).argument }
+
     it 'checks that touch in changes journey status to true' do
       subject.top_up(1)
       subject.touch_in
@@ -42,6 +44,11 @@ describe Oystercard do
       expect { subject.touch_in }.to raise_error "balance is not enough"
     end
 
+    it 'after touch in it remembers an entry_station'
+    let(:station){ double :station }
+      subject.top_up(10)
+      subject.touch_in(:station)
+      expect(subject.current_station).to eq(:station)
   end
 
   describe '#touch_out' do
@@ -58,6 +65,7 @@ describe Oystercard do
       subject.touch_in
       expect { subject.touch_out }.to change { subject.balance }.by(-Oystercard::MINIMUM_FARE)
     end
-
   end
+
+
 end

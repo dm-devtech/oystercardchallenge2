@@ -74,21 +74,27 @@ describe Oystercard do
       end
   end
 
-  describe 'station history' do
+  describe '#touch_out exit station' do
+    let(:entry_station) { double :station }
+    let(:exit_station) { double :station }
+    let(:journey){ {entry_station: entry_station, exit_station: exit_station} }
+
     it 'expects the station history to be empty before first journey' do
-      expect(subject.station_history).to be_empty
+      expect(subject.journeys).to be_empty
     end
 
-    it 'stores touch in and out stations' do
+    it 'stores exit station' do
       subject.top_up(10)
-      subject.touch_in("Victoria")
-      subject.touch_out("Waterloo")
-      subject.touch_in("Wimbledon")
-      subject.touch_out("Earlsfield")
-      expect(subject.station_history).to eq([
-        {:start=>"Victoria", :end=>"Waterloo"},
-        {:start=>"Wimbledon", :end=>"Earlsfield"}])
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.exit_station).to eq(exit_station)
+    end
+
+    it 'stores a journey' do
+      subject.top_up(10)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.journeys).to include journey
     end
   end
-
 end

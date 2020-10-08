@@ -45,19 +45,17 @@ describe Oystercard do
       expect { subject.touch_in(station) }.to raise_error "balance is not enough"
     end
 
-<<<<<<< HEAD
     it 'stores entry station' do
       subject.top_up(1)
       subject.touch_in(station)
       expect(subject.entry_station).to eq(station)
     end
-=======
-    it 'after touch in it remembers an entry_station'
-    let(:station){ double :station }
+
+    it 'after touch in it remembers an entry_station' do
       subject.top_up(10)
-      subject.touch_in(:station)
-      expect(subject.current_station).to eq(:station)
->>>>>>> f7f8326dac8998dbbfc94d1c1b0ce42a262dc17a
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq(station)
+     end
   end
 
   describe '#touch_out' do
@@ -65,25 +63,32 @@ describe Oystercard do
       it 'expects touch_out to change journey_status to false' do
         subject.top_up(1)
         subject.touch_in(station)
-        subject.touch_out
+        subject.touch_out(station)
         expect(subject.in_journey?).to eq(false)
       end
 
       it 'expects touch out to reduce balance by minimum amount' do
         subject.top_up(5)
         subject.touch_in(station)
-        expect { subject.touch_out }.to change { subject.balance }.by(-Oystercard::MINIMUM_FARE)
+        expect { subject.touch_out(station) }.to change { subject.balance }.by(-Oystercard::MINIMUM_FARE)
       end
   end
 
   describe 'station history' do
     it 'expects the station history to be empty before first journey' do
-      expect(subject.station_history).to eq([])
+      expect(subject.station_history).to be_empty
+    end
+
+    it 'stores touch in and out stations' do
+      subject.top_up(10)
+      subject.touch_in("Victoria")
+      subject.touch_out("Waterloo")
+      subject.touch_in("Wimbledon")
+      subject.touch_out("Earlsfield")
+      expect(subject.station_history).to eq([
+        {:start=>"Victoria", :end=>"Waterloo"},
+        {:start=>"Wimbledon", :end=>"Earlsfield"}])
     end
   end
 
-<<<<<<< HEAD
-=======
-
->>>>>>> f7f8326dac8998dbbfc94d1c1b0ce42a262dc17a
 end
